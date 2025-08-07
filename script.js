@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             // Load custom posts from local JSON file
-            const customResponse = await fetch('./data/custom-posts.json');
+            const customResponse = await fetch('./data/custom-posts.json?v=' + Date.now());
             let customPosts = [];
             
             if (customResponse.ok) {
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Load Substack posts from local JSON file (updated by GitHub Actions)
-            const substackResponse = await fetch('./data/substack-posts.json');
+            const substackResponse = await fetch('./data/substack-posts.json?v=' + Date.now());
             let substackPosts = [];
             
             if (substackResponse.ok) {
