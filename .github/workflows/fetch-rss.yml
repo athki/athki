@@ -50,7 +50,10 @@ jobs:
             
             print(f'Root tag: {root.tag}')
             channel = root.find("channel")
-            print(f'Channel tag: {channel.tag if channel else "No channel found"}')
+            if channel:
+                print(f'Channel tag: {channel.tag}')
+            else:
+                print('No channel found')
             
             posts = []
             items = root.findall('.//item')
