@@ -46,7 +46,10 @@ jobs:
             
             # Parse XML and extract posts
             import xml.etree.ElementTree as ET
-            root = ET.fromstring(response.content)
+            
+            # Clean up the XML content (remove newlines and extra spaces)
+            xml_content = response.content.decode('utf-8').replace('\n', '').replace('\r', '')
+            root = ET.fromstring(xml_content)
             
             print(f'Root tag: {root.tag}')
             channel = root.find("channel")
@@ -68,6 +71,9 @@ jobs:
                 if channel:
                     items = channel.findall('item')
                     print(f'Found {len(items)} items in channel')
+            
+            # Debug: print all tags in the XML
+            print(f'All tags found: {[elem.tag for elem in root.iter()]}')
             
             for item in items[:5]:  # Get latest 5 posts
                 title_elem = item.find('title')
