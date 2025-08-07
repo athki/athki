@@ -9,6 +9,8 @@ on:
 jobs:
   fetch-rss:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
     - name: Checkout repository
@@ -31,8 +33,11 @@ jobs:
         SUBSTACK_NAME = 'computingpower'
         RSS_URL = f'https://{SUBSTACK_NAME}.substack.com/feed'
         
+        print(f'Fetching RSS feed from: {RSS_URL}')
+        
         try:
-            response = requests.get(RSS_URL)
+            response = requests.get(RSS_URL, timeout=30)
+            print(f'Response status: {response.status_code}')
             response.raise_for_status()
             
             # Parse XML and extract posts
@@ -40,7 +45,10 @@ jobs:
             root = ET.fromstring(response.content)
             
             posts = []
-            for item in root.findall('.//item')[:5]:  # Get latest 5 posts
+            items = root.findall('.//item')
+            print(f'Found {len(items)} items in RSS feed')
+            
+            for item in items[:5]:  # Get latest 5 posts
                 title = item.find('title').text if item.find('title') is not None else 'Untitled'
                 link = item.find('link').text if item.find('link') is not None else '#'
                 pub_date = item.find('pubDate').text if item.find('pubDate') is not None else ''
@@ -67,6 +75,8 @@ jobs:
             
         except Exception as e:
             print(f'Error fetching RSS feed: {e}')
+            import traceback
+            traceback.print_exc()
             # Create empty file if fetch fails
             os.makedirs('data', exist_ok=True)
             with open('data/substack-posts.json', 'w') as f:
@@ -81,5 +91,9 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add data/substack-posts.json
-        git diff --quiet && git diff --staged --quiet || git commit -m "Update Substack posts"
-        git push 
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update Substack posts"
+          git push
+        fi 
