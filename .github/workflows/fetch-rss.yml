@@ -48,15 +48,39 @@ jobs:
             import xml.etree.ElementTree as ET
             root = ET.fromstring(response.content)
             
+            print(f'Root tag: {root.tag}')
+            print(f'Channel tag: {root.find("channel").tag if root.find("channel") else "No channel found"}')
+            
             posts = []
             items = root.findall('.//item')
             print(f'Found {len(items)} items in RSS feed')
             
+            # Also try alternative selectors
+            if len(items) == 0:
+                items = root.findall('item')
+                print(f'Found {len(items)} items with alternative selector')
+            if len(items) == 0:
+                channel = root.find('channel')
+                if channel:
+                    items = channel.findall('item')
+                    print(f'Found {len(items)} items in channel')
+            
             for item in items[:5]:  # Get latest 5 posts
-                title = item.find('title').text if item.find('title') is not None else 'Untitled'
-                link = item.find('link').text if item.find('link') is not None else '#'
-                pub_date = item.find('pubDate').text if item.find('pubDate') is not None else ''
-                description = item.find('description').text if item.find('description') is not None else ''
+                title_elem = item.find('title')
+                link_elem = item.find('link')
+                pub_date_elem = item.find('pubDate')
+                description_elem = item.find('description')
+                
+                title = title_elem.text if title_elem is not None else 'Untitled'
+                link = link_elem.text if link_elem is not None else '#'
+                pub_date = pub_date_elem.text if pub_date_elem is not None else ''
+                description = description_elem.text if description_elem is not None else ''
+                
+                # Clean up CDATA sections
+                title = title.replace('<![CDATA[', '').replace(']]>', '')
+                description = description.replace('<![CDATA[', '').replace(']]>', '')
+                
+                print(f'Processing post: {title}')
                 
                 posts.append({
                     'title': title,
