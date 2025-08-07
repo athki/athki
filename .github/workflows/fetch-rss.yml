@@ -1,0 +1,85 @@
+name: Fetch Substack RSS Feed
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  fetch-rss:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Fetch RSS feed
+      run: |
+        python -c "
+        import requests
+        import json
+        import os
+        from datetime import datetime
+        
+        # Replace with your actual Substack name
+        SUBSTACK_NAME = 'computingpower'
+        RSS_URL = f'https://{SUBSTACK_NAME}.substack.com/feed'
+        
+        try:
+            response = requests.get(RSS_URL)
+            response.raise_for_status()
+            
+            # Parse XML and extract posts
+            import xml.etree.ElementTree as ET
+            root = ET.fromstring(response.content)
+            
+            posts = []
+            for item in root.findall('.//item')[:5]:  # Get latest 5 posts
+                title = item.find('title').text if item.find('title') is not None else 'Untitled'
+                link = item.find('link').text if item.find('link') is not None else '#'
+                pub_date = item.find('pubDate').text if item.find('pubDate') is not None else ''
+                description = item.find('description').text if item.find('description') is not None else ''
+                
+                posts.append({
+                    'title': title,
+                    'link': link,
+                    'pubDate': pub_date,
+                    'description': description
+                })
+            
+            # Create data directory if it doesn't exist
+            os.makedirs('data', exist_ok=True)
+            
+            # Save to JSON file
+            with open('data/substack-posts.json', 'w') as f:
+                json.dump({
+                    'lastUpdated': datetime.now().isoformat(),
+                    'posts': posts
+                }, f, indent=2)
+                
+            print(f'Successfully fetched {len(posts)} posts')
+            
+        except Exception as e:
+            print(f'Error fetching RSS feed: {e}')
+            # Create empty file if fetch fails
+            os.makedirs('data', exist_ok=True)
+            with open('data/substack-posts.json', 'w') as f:
+                json.dump({
+                    'lastUpdated': datetime.now().isoformat(),
+                    'posts': []
+                }, f, indent=2)
+        "
+        
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/substack-posts.json
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update Substack posts"
+        git push 

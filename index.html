@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athki - Personal Website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">Christian Pfrang</div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#writing" class="nav-link active" data-tab="writing">Writing</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#publications" class="nav-link" data-tab="publications">Publications</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#home" class="nav-link" data-tab="home">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Home Tab -->
+        <section id="home" class="tab-content">
+            <div class="container">
+                <div class="welcome-section">
+                    <h1 class="welcome-title">Welcome!</h1>
+                    <p class="welcome-subtitle">Welcome to my home on the web!</p>
+                    
+                    <div class="profile-section">
+                        <div class="profile-image">
+                            <!-- Placeholder for your image -->
+                            <div class="image-placeholder">
+                                <span>Your Image Here</span>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-text">
+                            <p class="intro-text">
+                                My name is [Your Name]. I am a [your profession/description] with a passion for [your interests].
+                            </p>
+                            
+                            <p class="mission-text">
+                                My goal with this website is to [your mission/purpose].
+                            </p>
+                            
+                            <p class="interests-text">
+                                To give you a flavor of the types of things I am excited (and learning) about:
+                            </p>
+                            
+                            <ul class="interests-list">
+                                <li>Interest 1</li>
+                                <li>Interest 2</li>
+                                <li>Interest 3</li>
+                                <li>Interest 4</li>
+                                <li>Interest 5</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Publications Tab -->
+        <section id="publications" class="tab-content">
+            <div class="container">
+                <h1 class="section-title">Publications</h1>
+                <div class="publications-grid">
+                    <div class="publication-card">
+                        <h3>Publication Title 1</h3>
+                        <p class="publication-date">2024</p>
+                        <p class="publication-description">Description of your first publication.</p>
+                        <a href="#" class="publication-link">Read More</a>
+                    </div>
+                    
+                    <div class="publication-card">
+                        <h3>Publication Title 2</h3>
+                        <p class="publication-date">2023</p>
+                        <p class="publication-description">Description of your second publication.</p>
+                        <a href="#" class="publication-link">Read More</a>
+                    </div>
+                    
+                    <div class="publication-card">
+                        <h3>Publication Title 3</h3>
+                        <p class="publication-date">2022</p>
+                        <p class="publication-description">Description of your third publication.</p>
+                        <a href="#" class="publication-link">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Writing Tab -->
+        <section id="writing" class="tab-content active">
+            <div class="container">
+                <h1 class="section-title">Writing</h1>
+                <div class="writing-list" id="substack-posts">
+                    <div class="loading">Loading latest posts...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html> 
