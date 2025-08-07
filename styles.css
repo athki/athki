@@ -445,12 +445,21 @@ body {
 
 /* Responsive design */
 @media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        height: auto;
+        padding: 15px 20px;
+        gap: 15px;
+    }
+    
     .nav-brand {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
+        align-self: flex-start;
     }
     
     .nav-menu {
         gap: 20px;
+        align-self: flex-end;
     }
     
     .welcome-title {
@@ -477,11 +486,12 @@ body {
 
 @media (max-width: 480px) {
     .nav-brand {
-        font-size: 1rem;
+        font-size: 1.3rem;
     }
     
     .nav-container {
-        padding: 0 15px;
+        padding: 10px 15px;
+        gap: 10px;
     }
     
     .nav-menu {
