@@ -49,7 +49,8 @@ jobs:
             root = ET.fromstring(response.content)
             
             print(f'Root tag: {root.tag}')
-            print(f'Channel tag: {root.find("channel").tag if root.find("channel") else "No channel found"}')
+            channel = root.find("channel")
+            print(f'Channel tag: {channel.tag if channel else "No channel found"}')
             
             posts = []
             items = root.findall('.//item')
