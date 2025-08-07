@@ -49,6 +49,8 @@ jobs:
             
             # Clean up the XML content (remove newlines and extra spaces)
             xml_content = response.content.decode('utf-8').replace('\n', '').replace('\r', '')
+            print(f'XML content length: {len(xml_content)}')
+            print(f'First 500 chars: {xml_content[:500]}')
             root = ET.fromstring(xml_content)
             
             print(f'Root tag: {root.tag}')
@@ -73,9 +75,16 @@ jobs:
                     print(f'Found {len(items)} items in channel')
             
             # Debug: print all tags in the XML
-            print(f'All tags found: {[elem.tag for elem in root.iter()]}')
+            all_tags = [elem.tag for elem in root.iter()]
+            print(f'All tags found: {all_tags}')
             
-            for item in items[:5]:  # Get latest 5 posts
+            # Count items found
+            print(f'Total items found: {len(items)}')
+            
+            for i, item in enumerate(items[:5]):  # Get latest 5 posts
+                print(f'Processing item {i+1}:')
+                print(f'  Item tag: {item.tag}')
+                print(f'  Item children: {[child.tag for child in item]}')
                 title_elem = item.find('title')
                 link_elem = item.find('link')
                 pub_date_elem = item.find('pubDate')
