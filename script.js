@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
             postsContainer.innerHTML = `
                 <div class="error-message">
                     <p>Unable to load posts at the moment.</p>
-                    <p><a href="https://computingpower.substack.com" target="_blank">Visit my Substack directly</a></p>
+                    <p><a href="https://humanandtheloop.substack.com" target="_blank">Visit my Substack directly</a></p>
                 </div>
             `;
         }
